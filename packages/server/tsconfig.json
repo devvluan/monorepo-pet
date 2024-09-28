@@ -1,31 +1,7 @@
 {
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
-    "target": "es6", // Compila para ES6
-    "module": "commonjs", // Usa o sistema de módulos CommonJS
-    "moduleResolution": "node", // Resolve módulos como o Node.js
-    "esModuleInterop": true, // Permite importar módulos CommonJS como ES6
-    "allowSyntheticDefaultImports": true, // Permite importar módulos CommonJS como ES6
-    "strict": true, // Ativa o modo estrito do TypeScript
-    "strictNullChecks": true, // Ativa as verificações de null e undefined
-    "strictFunctionTypes": true, // Ativa as verificações de tipos de função
-    "strictBindCallApply": true, // Ativa as verificações de bind, call e apply
-    "strictPropertyInitialization": true, // Ativa as verificações de inicialização de propriedades
-    "noImplicitAny": true, // Não permite o uso implícito de any
-    "noImplicitThis": true, // Não permite o uso implícito de this
-    "alwaysStrict": true, // Sempre usa o modo estrito
-    "sourceMap": true, // Gera arquivos de mapa de fonte
-    "outDir": "dist", // Diretório de saída para os arquivos compilados
-    "rootDir": "src", // Diretório raiz para os arquivos de entrada
-    "typeRoots": ["node_modules/@types"], // Diretório raiz para os arquivos de tipo
-    "lib": ["es6", "dom"], // Bibliotecas padrão para o projeto
-    "allowUmdGlobalAccess": true, // Permite o acesso global a módulos UMD
-    "resolveJsonModule": true, // Permite a importação de arquivos JSON como módulos
-    "isolatedModules": true, // Compila os módulos de forma isolada
-    "noEmitOnError": true, // Não emite arquivos compilados se houver erros
-    "noImplicitReturns": true, // Não permite o uso implícito de returns
-    "noUnusedLocals": true, // Não permite o uso de variáveis locais não utilizadas
-    "noUnusedParameters": true // Não permite o uso de parâmetros não utilizados
-  },
-  "include": ["src/**/*"], // Inclui todos os arquivos do diretório src
-  "exclude": ["node_modules", "dist"] // Exclui os diretórios node_modules e dist
+    "rootDir": "./",
+    "outDir": "./build"
+  }
 }
