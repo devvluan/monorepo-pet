@@ -5,10 +5,6 @@
 @tailwind utilities;
 
 @layer base {
-  .font-body {
-    @apply font-sans; /* Exemplo de aplicação de uma família de fontes do Tailwind */
-    font-family: "SeuNomeDeFonte", sans-serif; /* Defina a família de fontes personalizada */
-  }
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
