@@ -20,8 +20,22 @@ export default function LoginUser() {
     resolver: zodResolver(createUserFormSchema),
   });
 
-  const onSubmit: SubmitHandler<CreateUserFormData> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<CreateUserFormData> = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3333/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        window.location.href = "/dashboard/caixa";
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

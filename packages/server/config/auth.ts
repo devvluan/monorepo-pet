@@ -7,7 +7,7 @@ const authConfig = defineConfig({
   guards: {
     basicAuth: basicAuthGuard({
       provider: basicAuthUserProvider({
-        model: () => import('#models/user')
+        model: () => import('#models/user'),
       }),
     }),
   },
