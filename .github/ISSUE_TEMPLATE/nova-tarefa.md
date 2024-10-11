@@ -1,3 +1,12 @@
+---
+name: nova-tarefa
+about: Crição de tarefas
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## Descrição da Tarefa
 
 [Inserir uma breve descrição da tarefa aqui, explicando o que precisa ser feito e qual impacto terá no projeto.]
