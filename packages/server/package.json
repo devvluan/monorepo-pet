@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@monorepo/server",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -41,6 +41,7 @@
     "@japa/plugin-adonisjs": "^3.0.1",
     "@japa/runner": "^3.1.4",
     "@swc/core": "^1.7.22",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.5.1",
     "eslint": "^9.9.1",
@@ -56,6 +57,7 @@
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^21.2.0",
     "@vinejs/vine": "^2.1.0",
+    "jsonwebtoken": "^9.0.2",
     "luxon": "^3.5.0",
     "mysql2": "^3.11.3",
     "reflect-metadata": "^0.2.2"

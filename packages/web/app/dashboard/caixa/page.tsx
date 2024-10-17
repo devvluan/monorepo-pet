@@ -12,12 +12,15 @@ const createUserFormSchema = z.object({
   quantidade: z.number({
     invalid_type_error: "Insira a quantidade do produto",
   }),
-  valor: z.preprocess((input) => {
-    if (typeof input === "string") {
-      return parseFloat(input.replace(",", "."));
-    }
-    return input;
-  }, z.number({ invalid_type_error: "Insira o valor do produto" })),
+  valor: z.preprocess(
+    (input) => {
+      if (typeof input === "string") {
+        return parseFloat(input.replace(",", "."));
+      }
+      return input;
+    },
+    z.number({ invalid_type_error: "Insira o valor do produto" })
+  ),
 });
 
 type CreateUserFormData = z.infer<typeof createUserFormSchema>;
@@ -34,6 +37,8 @@ export default function Caixa() {
   });
 
   const onSubmit: SubmitHandler<CreateUserFormData> = (data) => {
+    console.log(data);
+
     const novaVenda: Venda = {
       ...data,
       data: new Intl.DateTimeFormat("pt-BR", {
