@@ -53,26 +53,4 @@ export default class AuthController {
       message: 'Usuário registrado com sucesso',
     })
   }
-
-  public async returnDashboard({ auth, response }: HttpContext) {
-    try {
-      const user = auth.user
-
-      if (!user) {
-        return response.status(401).json({
-          message: 'Usuário não autenticado',
-        })
-      }
-
-      return response.status(200).json({
-        id: user.id,
-        email: user.email,
-      })
-    } catch (error) {
-      return response.status(500).json({
-        message: 'Erro ao buscar informações do dashboard',
-        error: error.message,
-      })
-    }
-  }
 }
