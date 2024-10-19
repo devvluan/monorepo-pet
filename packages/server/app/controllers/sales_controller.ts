@@ -17,8 +17,6 @@ export default class SalesController {
   public async salesHistory({ response }: HttpContext) {
     const data = await db.from('sales').select('client', 'product', 'amount', 'price', 'created_at')
 
-    console.log('informações enviadas: ', data)
-
     return response.status(200).json(data)
   }
 }
