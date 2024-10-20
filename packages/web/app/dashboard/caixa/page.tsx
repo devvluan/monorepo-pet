@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Bell, ChevronDown, Search, User } from "lucide-react";
 import { DateTime } from "luxon";
+import SuccessAlert from "@/components/SuccessAlert";
 
 const createUserFormSchema = z.object({
   client: z.string().min(1, "Cliente é obrigatório"),
@@ -30,6 +31,7 @@ type CreateUserFormData = z.infer<typeof createUserFormSchema>;
 type Venda = CreateUserFormData & { data: string; created_at: DateTime };
 export default function Caixa() {
   const [historicoVendas, setHistoricoVendas] = useState<Venda[]>([]);
+  const [alertOpen, setAlertOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -66,7 +68,7 @@ export default function Caixa() {
       });
 
       if (response.ok) {
-        alert("Venda registrada com sucesso");
+        setAlertOpen(true);
       }
       const novaVenda: Venda = {
         ...data,
@@ -106,6 +108,11 @@ export default function Caixa() {
           </div>
         </header>
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <SuccessAlert
+            show={alertOpen}
+            message="Venda registrada com sucesso"
+            onClose={() => setAlertOpen(false)}
+          />
           <div>
             <label htmlFor="cliente" className="block font-medium mb-1">
               Cliente
