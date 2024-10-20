@@ -63,7 +63,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li className="item-menu">
-                <Link href="/Configuracao">
+                <Link href="/config">
                   <span className="icon">
                     <i className="bi bi-gear"></i>
                   </span>
@@ -71,7 +71,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li className="item-menu">
-                <Link href="Perfil">
+                <Link href="profile">
                   <span className="icon">
                     <i className="bi bi-person-fill"></i>
                   </span>

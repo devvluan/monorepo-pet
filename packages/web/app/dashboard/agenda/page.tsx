@@ -2,46 +2,15 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Calendar,
-  List,
-  Grid,
-  Plus,
-  Search,
-  Bell,
-  User,
-  ChevronDown,
-} from "lucide-react";
+import { Calendar, List, Grid, Plus } from "lucide-react";
+import Header from "@/components/Header";
 
 export default function Agenda() {
   const [selected, setSelected] = useState<Date>();
   return (
     <div className="ml-[4.8rem] flex-1 p-4 h-screen bg-gray-100">
       {/* Header */}
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold ">Agenda de Pets</h1>
-        <div className="flex items-center space-x-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Pesquisar..."
-              className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          </div>
-          <Button className="p-2 rounded-full hover:bg-gray-700 transition-colors">
-            <Bell className="w-6 h-6" />
-          </Button>
-          <div className="flex items-center space-x-2 cursor-pointer">
-            <Button className="p-2 rounded-full hover:bg-gray-700">
-              <User className="w-6 h-6 text-white" />
-            </Button>
-            <span className="font-medium">John Doe</span>
-            <ChevronDown className="w-4 h-4 text-gray-600" />
-          </div>
-        </div>
-      </header>
-
+      <Header title="Agenda" />
       {/* Main Content */}
       <main className="bg-white rounded-lg shadow-md p-6">
         {/* Tabs */}
