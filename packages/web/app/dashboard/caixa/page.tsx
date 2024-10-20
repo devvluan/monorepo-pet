@@ -3,16 +3,19 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Bell, ChevronDown, Search, User } from "lucide-react";
+import { DateTime } from "luxon";
+import SuccessAlert from "@/components/SuccessAlert";
 
 const createUserFormSchema = z.object({
-  cliente: z.string().min(1, "Cliente é obrigatório"),
-  produto: z.string().min(1, "Produto é obrigatório"),
-  quantidade: z.number({
+  client: z.string().min(1, "Cliente é obrigatório"),
+  product: z.string().min(1, "Produto é obrigatório"),
+  amount: z.number({
     invalid_type_error: "Insira a quantidade do produto",
   }),
-  valor: z.preprocess(
+  price: z.preprocess(
     (input) => {
       if (typeof input === "string") {
         return parseFloat(input.replace(",", "."));
@@ -25,9 +28,10 @@ const createUserFormSchema = z.object({
 
 type CreateUserFormData = z.infer<typeof createUserFormSchema>;
 
-type Venda = CreateUserFormData & { data: string };
+type Venda = CreateUserFormData & { data: string; created_at: DateTime };
 export default function Caixa() {
   const [historicoVendas, setHistoricoVendas] = useState<Venda[]>([]);
+  const [alertOpen, setAlertOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -36,28 +40,79 @@ export default function Caixa() {
     resolver: zodResolver(createUserFormSchema),
   });
 
-  const onSubmit: SubmitHandler<CreateUserFormData> = (data) => {
-    console.log(data);
+  useEffect(() => {
+    async function fetchHistoricoVendas() {
+      const response = await fetch(
+        "http://localhost:3333/dashboard/historico/vendas",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const historicoVendas = await response.json();
+      setHistoricoVendas(historicoVendas);
+    }
+    fetchHistoricoVendas();
+  }, []);
 
-    const novaVenda: Venda = {
-      ...data,
-      data: new Intl.DateTimeFormat("pt-BR", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hourCycle: "h23",
-      }).format(new Date()),
-    };
-    setHistoricoVendas((prevVendas) => [...prevVendas, novaVenda]);
+  const onSubmit: SubmitHandler<CreateUserFormData> = async (data) => {
+    try {
+      const response = await fetch("http://localhost:3333/dashboard/vendas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setAlertOpen(true);
+      }
+      const novaVenda: Venda = {
+        ...data,
+        created_at: DateTime.utc(),
+        data: "",
+      };
+      setHistoricoVendas((prevVendas) => [...prevVendas, novaVenda]);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <main className="flex-1 p-4">
       <div className="ml-[4.8rem] bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold mb-4">Registro de Vendas</h2>
+        <header className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold ">Registro de Vendas</h1>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Pesquisar..."
+                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            </div>
+            <Button className="p-2 rounded-full hover:bg-gray-700 transition-colors">
+              <Bell className="w-6 h-6" />
+            </Button>
+            <div className="flex items-center space-x-2 cursor-pointer">
+              <Button className="p-2 rounded-full hover:bg-gray-700">
+                <User className="w-6 h-6 text-white" />
+              </Button>
+              <span className="font-medium">John Doe</span>
+              <ChevronDown className="w-4 h-4 text-gray-600" />
+            </div>
+          </div>
+        </header>
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <SuccessAlert
+            show={alertOpen}
+            message="Venda registrada com sucesso"
+            onClose={() => setAlertOpen(false)}
+          />
           <div>
             <label htmlFor="cliente" className="block font-medium mb-1">
               Cliente
@@ -67,10 +122,10 @@ export default function Caixa() {
               id="cliente"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="Nome do cliente"
-              {...register("cliente")}
+              {...register("client")}
             />
-            {errors.cliente && (
-              <p className="text-red-500">{errors.cliente.message}</p>
+            {errors.client && (
+              <p className="text-red-500">{errors.client.message}</p>
             )}
           </div>
           <div>
@@ -82,10 +137,10 @@ export default function Caixa() {
               id="produto"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Nome do produto"
-              {...register("produto")}
+              {...register("product")}
             />
-            {errors.produto && (
-              <p className="text-red-500">{errors.produto.message}</p>
+            {errors.product && (
+              <p className="text-red-500">{errors.product.message}</p>
             )}
           </div>
           <div>
@@ -97,10 +152,10 @@ export default function Caixa() {
               id="quantidade"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="Quantidade"
-              {...register("quantidade", { valueAsNumber: true })}
+              {...register("amount", { valueAsNumber: true })}
             />
-            {errors.quantidade && (
-              <p className="text-red-500">{errors.quantidade.message}</p>
+            {errors.amount && (
+              <p className="text-red-500">{errors.amount.message}</p>
             )}
           </div>
           <div>
@@ -113,10 +168,10 @@ export default function Caixa() {
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="Valor"
               step="0.01"
-              {...register("valor", { valueAsNumber: true })}
+              {...register("price", { valueAsNumber: true })}
             />
-            {errors.valor && (
-              <p className="text-red-500">{errors.valor.message}</p>
+            {errors.price && (
+              <p className="text-red-500">{errors.price.message}</p>
             )}
           </div>
           <Button
@@ -140,25 +195,28 @@ export default function Caixa() {
             </tr>
           </thead>
           <tbody>
-            {historicoVendas
-              .slice()
-              .reverse()
-              .map((venda, index) => (
-                <tr key={index} className="border-b">
-                  <td className="px-4 py-2 text-left">{venda.cliente}</td>
-                  <td className="px-4 py-2 text-left">{venda.produto}</td>
-                  <td className="px-4 py-2 text-left">{venda.quantidade}</td>
-                  <td className="px-4 py-2 text-left">
-                    {" "}
-                    R$
-                    {venda.valor.toLocaleString("pt-BR", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
-                  </td>
-                  <td className="px-4 py-2">{venda.data}</td>
-                </tr>
-              ))}
+            {historicoVendas.toReversed().map((venda, index) => (
+              <tr key={index} className="border-b">
+                <td className="px-4 py-2 text-left">{venda.client}</td>
+                <td className="px-4 py-2 text-left">{venda.product}</td>
+                <td className="px-4 py-2 text-left">{venda.amount}</td>
+                <td className="px-4 py-2 text-left">
+                  {" "}
+                  R$
+                  {venda.price.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </td>
+                <td className="px-4 py-2">
+                  {DateTime.fromISO(venda.created_at.toString(), {
+                    zone: "utc",
+                  })
+                    .setLocale("pt-BR")
+                    .toFormat("dd/MM/yyyy HH:mm")}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

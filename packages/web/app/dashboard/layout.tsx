@@ -29,7 +29,7 @@ export default function RootLayout({
             <ul className="">
               <li className="item-menu">
                 <Link
-                  href="/"
+                  href="/dashboard"
                   className="item-menu flex items-center hover:bg-gray-700 p-2 rounded"
                 >
                   <span className="icon">
@@ -52,6 +52,14 @@ export default function RootLayout({
                     <i className="bi bi-calendar-event"></i>
                   </span>
                   <span className="txt-link">Agenda</span>
+                </Link>
+              </li>
+              <li className="item-menu">
+                <Link href="/dashboard/relatorio">
+                  <span className="icon">
+                    <i className="bi bi-receipt"></i>
+                  </span>
+                  <span className="txt-link">Relatórios</span>
                 </Link>
               </li>
               <li className="item-menu">
