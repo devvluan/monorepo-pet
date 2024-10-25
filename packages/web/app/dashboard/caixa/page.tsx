@@ -5,9 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Bell, ChevronDown, Search, User } from "lucide-react";
 import { DateTime } from "luxon";
 import SuccessAlert from "@/components/SuccessAlert";
+import Header from "@/components/Header";
 
 const createUserFormSchema = z.object({
   client: z.string().min(1, "Cliente é obrigatório"),
@@ -83,30 +83,10 @@ export default function Caixa() {
 
   return (
     <main className="flex-1 p-4">
+      <div className="ml-[4.8rem]">
+        <Header title="Registro de Vendas" />
+      </div>
       <div className="ml-[4.8rem] bg-white rounded-lg shadow-md p-6">
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold ">Registro de Vendas</h1>
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Pesquisar..."
-                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            </div>
-            <Button className="p-2 rounded-full hover:bg-gray-700 transition-colors">
-              <Bell className="w-6 h-6" />
-            </Button>
-            <div className="flex items-center space-x-2 cursor-pointer">
-              <Button className="p-2 rounded-full hover:bg-gray-700">
-                <User className="w-6 h-6 text-white" />
-              </Button>
-              <span className="font-medium">John Doe</span>
-              <ChevronDown className="w-4 h-4 text-gray-600" />
-            </div>
-          </div>
-        </header>
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <SuccessAlert
             show={alertOpen}
