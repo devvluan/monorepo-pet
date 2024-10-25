@@ -1,4 +1,5 @@
-import "../styles/globals.css";
+import "@/app/styles/globals.css";
+
 export const metadata = {
   title: "Gestão de Pet - Login",
 };

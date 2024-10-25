@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
+import "@/app/styles/globals.css";
 
 const createUserFormSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -12,7 +13,7 @@ const createUserFormSchema = z.object({
 
 type CreateUserFormData = z.infer<typeof createUserFormSchema>;
 
-export default function LoginForm() {
+export function LoginForm() {
   const {
     register,
     handleSubmit,
@@ -23,13 +24,16 @@ export default function LoginForm() {
 
   const onSubmit: SubmitHandler<CreateUserFormData> = async (data) => {
     try {
-      const response = await fetch("http://localhost:3333/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
