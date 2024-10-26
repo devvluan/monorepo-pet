@@ -39,7 +39,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li className="item-menu">
-                <Link href="caixa">
+                <Link href="/dashboard/caixa">
                   <span className="icon">
                     <i className="bi bi-basket2-fill"></i>
                   </span>
@@ -47,7 +47,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li className="item-menu">
-                <Link href="agenda">
+                <Link href="/dashboard/agenda">
                   <span className="icon">
                     <i className="bi bi-calendar-event"></i>
                   </span>
@@ -55,7 +55,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li className="item-menu">
-                <Link href="relatorio">
+                <Link href="/dashboard/relatorio">
                   <span className="icon">
                     <i className="bi bi-receipt"></i>
                   </span>
@@ -71,7 +71,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li className="item-menu">
-                <Link href="profile">
+                <Link href="/dashboard/profile">
                   <span className="icon">
                     <i className="bi bi-person-fill"></i>
                   </span>
