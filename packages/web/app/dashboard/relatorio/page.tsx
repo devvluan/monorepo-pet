@@ -1,16 +1,7 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-
-export default async function Report() {
-  const session = await getServerSession();
-
-  if (!session) {
-    redirect("/auth");
-  }
-
+export default function Report() {
   return (
-    <div>
-      <h1>Relatórios</h1>
-    </div>
+    <main className="ml-[4.8rem] p-6">
+      <h1>Perfil</h1>
+    </main>
   );
 }
