@@ -63,7 +63,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li className="item-menu">
-                <Link href="configuracoes">
+                <Link href="/dashboard/configuracoes">
                   <span className="icon">
                     <i className="bi bi-gear"></i>
                   </span>
