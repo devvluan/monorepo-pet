@@ -1,30 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Site de Gestão de Pets
 
-## Getting Started
+Bem-vindo ao nosso projeto de **Gestão de Pets**, uma plataforma online projetada para ajudar amantes de animais a gerenciar e cuidar de seus pets de forma prática e eficiente.
 
-First, run the development server:
+## O Que É Este Projeto?
 
-```bash
-pnpm dev
-```
+Este site oferece uma solução simples para registrar, acompanhar e organizar informações sobre seus animais de estimação. Com ele, você pode:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Adicionar Pets**: Insira detalhes sobre seus animais, como nome, idade, raça e muito mais.
+- **Gerenciar Informações**: Mantenha um registro atualizado de consultas veterinárias, vacinas e atividades diárias.
+- **Interagir com Outros Usuários**: Conecte-se com outros amantes de pets, compartilhe dicas e experiências.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Como Usar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Para começar a usar o site, você precisa configurar o ambiente em seu computador. Aqui estão as etapas simples:
 
-## Learn More
+1. **Instale as Dependências**:
+   Abra o terminal no seu computador e digite o seguinte comando para instalar os pacotes necessários:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   pnpm i
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Inicie o Site**:
+   Após a instalação, você pode iniciar o servidor local com o comando:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   pnpm dev
+   ```
 
-## Deploy on Vercel
+3. **Acesse o Site**:
+   Com o servidor em funcionamento, abra seu navegador e vá até [http://localhost:3000](http://localhost:3000) para explorar o site.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Como Funciona
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A interface é intuitiva e fácil de usar. Você pode editar as informações diretamente na página inicial e ver as mudanças em tempo real. Isso torna a gestão de seus pets muito mais simples e agradável.
+
+## Aprenda Mais
+
+Se você deseja saber mais sobre as funcionalidades e recursos disponíveis, sinta-se à vontade para explorar a plataforma. Acreditamos que ela pode ser uma ferramenta valiosa para quem ama pets!
+
+## Contribuição
+
+Este projeto está sempre aberto a melhorias! Se você tiver sugestões ou ideias, ficaremos felizes em ouvir você. Entre em contato conosco para compartilhar seu feedback.
