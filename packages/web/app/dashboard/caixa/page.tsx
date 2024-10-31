@@ -8,6 +8,17 @@ import { Button } from "@/components/ui/button";
 import { DateTime } from "luxon";
 import SuccessAlert from "@/components/SuccessAlert";
 import Header from "@/components/Header";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { Plus } from "lucide-react";
 
 const createUserFormSchema = z.object({
   client: z.string().min(1, "Cliente é obrigatório"),
@@ -82,25 +93,26 @@ export default function Caixa() {
   };
 
   return (
-    <main className="flex-1 p-4">
-      <div className="ml-[4.8rem]">
+    <Card className="ml-[4.8rem]">
+      <CardHeader>
         <Header title="Registro de Vendas" />
-      </div>
-      <div className="ml-[4.8rem] bg-white rounded-lg shadow-md p-6">
-        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      </CardHeader>
+      <CardContent>
+        <form className="gap-4" onSubmit={handleSubmit(onSubmit)}>
           <SuccessAlert
             show={alertOpen}
             message="Venda registrada com sucesso"
             onClose={() => setAlertOpen(false)}
           />
+
           <div>
             <label htmlFor="cliente" className="block font-medium mb-1">
               Cliente
             </label>
-            <input
+            <Input
               type="text"
               id="cliente"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+              className="border border-gray-300"
               placeholder="Nome do cliente"
               {...register("client")}
             />
@@ -108,14 +120,15 @@ export default function Caixa() {
               <p className="text-red-500">{errors.client.message}</p>
             )}
           </div>
+
           <div>
-            <label htmlFor="produto" className="block font-medium mb-1">
+            <label htmlFor="produto" className="block font-medium mt-3 mb-1">
               Produto
             </label>
-            <input
+            <Input
               type="text"
               id="produto"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="border border-gray-300"
               placeholder="Nome do produto"
               {...register("product")}
             />
@@ -124,13 +137,13 @@ export default function Caixa() {
             )}
           </div>
           <div>
-            <label htmlFor="quantidade" className="block font-medium mb-1">
+            <label htmlFor="quantidade" className="block font-medium mt-3 mb-1">
               Quantidade
             </label>
-            <input
+            <Input
               type="number"
               id="quantidade"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+              className="border border-gray-300"
               placeholder="Quantidade"
               {...register("amount", { valueAsNumber: true })}
             />
@@ -139,13 +152,13 @@ export default function Caixa() {
             )}
           </div>
           <div>
-            <label htmlFor="valor" className="block font-medium mb-1">
+            <label htmlFor="valor" className="block font-medium mt-3 mb-1">
               Valor
             </label>
-            <input
+            <Input
               type="number"
               id="valor"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+              className="border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="Valor"
               step="0.01"
               {...register("price", { valueAsNumber: true })}
@@ -154,52 +167,46 @@ export default function Caixa() {
               <p className="text-red-500">{errors.price.message}</p>
             )}
           </div>
-          <Button
-            type="submit"
-            className="bg-emerald-500 rounded font-semibold - text-white h-10 p-2 hover:bg-emerald-600"
-          >
-            Registrar Venda
+          <Button type="submit" className="mt-4 w-60">
+            <Plus className="mr-2 h-4 w-4" /> Registrar Venda
           </Button>
         </form>
-      </div>
-      <div className="ml-[4.8rem] bg-white roudend-lg shadow-md p-6 mt-6">
-        <h2 className="text-2x1 font-bold mb-4">Histórico de Vendas</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 text-left">Cliente</th>
-              <th className="px-4 py-2 text-left">Produto</th>
-              <th className="px-4 py-2 text-left">Quantidade</th>
-              <th className="px-4 py-2 text-left">Valor</th>
-              <th className="px-4 py-2 text-left">Data</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table className="mt-4">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Cliente</TableHead>
+              <TableHead>Produto</TableHead>
+              <TableHead>Quantidade</TableHead>
+              <TableHead>Valor</TableHead>
+              <TableHead>Data</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {historicoVendas.toReversed().map((venda, index) => (
-              <tr key={index} className="border-b">
-                <td className="px-4 py-2 text-left">{venda.client}</td>
-                <td className="px-4 py-2 text-left">{venda.product}</td>
-                <td className="px-4 py-2 text-left">{venda.amount}</td>
-                <td className="px-4 py-2 text-left">
+              <TableRow key={index}>
+                <TableCell>{venda.client}</TableCell>
+                <TableCell>{venda.product}</TableCell>
+                <TableCell>{venda.amount}</TableCell>
+                <TableCell>
                   {" "}
                   R$
                   {venda.price.toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </td>
-                <td className="px-4 py-2">
+                </TableCell>
+                <TableCell>
                   {DateTime.fromISO(venda.created_at.toString(), {
                     zone: "utc",
                   })
                     .setLocale("pt-BR")
                     .toFormat("dd/MM/yyyy HH:mm")}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </main>
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 }
