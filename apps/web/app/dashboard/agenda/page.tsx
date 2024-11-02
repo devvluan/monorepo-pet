@@ -1,12 +1,10 @@
 // app/home/page.tsx
 "use client";
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Calendar, List, Grid, Plus } from "lucide-react";
 import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
+import { Calendar, Grid, List, Plus } from "lucide-react";
 
 export default function Agenda() {
-  const [selected, setSelected] = useState<Date>();
   return (
     <div className="ml-[4.8rem] flex-1 p-4 h-screen bg-gray-100">
       {/* Header */}
