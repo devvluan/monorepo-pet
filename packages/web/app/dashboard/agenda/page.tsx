@@ -6,7 +6,7 @@ import { Calendar, Grid, List, Plus } from "lucide-react";
 
 export default function Agenda() {
   return (
-    <div className="ml-[4.8rem] flex-1 p-4 h-screen bg-gray-100">
+    <div className="">
       {/* Header */}
       <Header title="Agenda" />
       {/* Main Content */}
