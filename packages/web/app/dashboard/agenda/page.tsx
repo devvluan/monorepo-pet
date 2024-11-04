@@ -3,8 +3,12 @@
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Calendar, Grid, List, Plus } from "lucide-react";
+import { Scheduling } from "@/components/Modal/Scheduling";
+import { useState } from "react";
 
 export default function Agenda() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="ml-[4.8rem] flex-1 p-4 h-screen bg-gray-100">
       {/* Header */}
@@ -33,10 +37,18 @@ export default function Agenda() {
             <h2 className="text-xl font-semibold">
               Calendário de Agendamentos
             </h2>
-            <Button className="bg-primary text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-gray-700">
+            <Button
+              className="bg-primary text-white py-2 px-4 rounded-lg flex items-center space-x-2 hover:bg-gray-700"
+              onClick={() => setShowModal(true)}
+            >
               <Plus className="w-5 h-5" />
               <span>Novo Agendamento</span>
             </Button>
+            {showModal && (
+              <>
+                <Scheduling onClose={() => setShowModal(false)} />
+              </>
+            )}
           </div>
           <div className="grid grid-cols-7 gap-2">
             {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((day) => (

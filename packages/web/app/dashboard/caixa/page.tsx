@@ -26,7 +26,7 @@ const createUserFormSchema = z.object({
   product: z.string().min(1, "Produto é obrigatório"),
   quantity: z.number().min(1, "Quantidade é obrigatório"),
   price: z.number().min(0.01, "Valor deve ser maior que zero"),
-  form_payment: z.enum(["card", "money", "pix"], {
+  form_payment: z.enum(["Cartão", "Dinheiro", "Pix"], {
     required_error: "Forma de pagamento é obrigatório",
   }),
   data: z.date().optional(),
@@ -51,7 +51,7 @@ export default function Caixa() {
       product: "",
       quantity: 0,
       price: 0,
-      form_payment: "card",
+      form_payment: "Cartão",
     },
   });
 
@@ -168,11 +168,15 @@ export default function Caixa() {
             className="grid grid-cols-3 gap-4 mt-2"
             value={watch("form_payment")}
             onValueChange={(value) =>
-              setValue("form_payment", value as "card" | "money" | "pix")
+              setValue("form_payment", value as "Cartão" | "Dinheiro" | "Pix")
             }
           >
             <div>
-              <RadioGroupItem value="card" id="card" className="peer sr-only" />
+              <RadioGroupItem
+                value="Cartão"
+                id="card"
+                className="peer sr-only"
+              />
               <Label
                 htmlFor="card"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -183,7 +187,7 @@ export default function Caixa() {
             </div>
             <div>
               <RadioGroupItem
-                value="money"
+                value="Dinheiro"
                 id="money"
                 className="peer sr-only"
               />
@@ -196,7 +200,7 @@ export default function Caixa() {
               </Label>
             </div>
             <div>
-              <RadioGroupItem value="pix" id="pix" className="peer sr-only" />
+              <RadioGroupItem value="Pix" id="pix" className="peer sr-only" />
               <Label
                 htmlFor="pix"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
