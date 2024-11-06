@@ -97,7 +97,7 @@ export default function Caixa() {
   };
 
   return (
-    <div className="ml-[4.8rem] p-6">
+    <>
       <Header title="Registro de Vendas" />
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 mb-6">
@@ -251,6 +251,6 @@ export default function Caixa() {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 }

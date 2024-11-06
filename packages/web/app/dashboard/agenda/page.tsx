@@ -10,7 +10,7 @@ export default function Agenda() {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="ml-[4.8rem] flex-1 p-4 h-screen bg-gray-100">
+    <div className="">
       {/* Header */}
       <Header title="Agenda" />
       {/* Main Content */}
