@@ -11,6 +11,26 @@ const handler = NextAuth({
     strategy: "jwt",
   },
 
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     if (user) {
+  //       token.id = user.id;
+  //       token.email = user.email;
+  //       token.name = user.name;
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     if (token) {
+  //       if (session.user) {
+  //         session.user.email = token.email;
+  //         session.user.name = token.name;
+  //       }
+  //     }
+  //     return session;
+  //   },
+  // },
+
   providers: [
     CredentialsProvider({
       name: "Credentials",
