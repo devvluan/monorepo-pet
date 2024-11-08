@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import { Sidebar } from "@/components/Sidebar";
 
 export const metadata = {
-  title: "Ludis - Dashboard",
+  title: "Ludis PET",
 };
 
 export default function RootLayout({
