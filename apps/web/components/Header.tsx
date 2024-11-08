@@ -11,12 +11,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "./ui/input";
 import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 interface HeaderProps {
   title: string;
 }
 
 export default function Header({ title }: HeaderProps) {
+  const { data: session } = useSession();
   return (
     <header className="flex justify-between items-center mb-8 px-4 py-3 bg-background border-b">
       <h1 className="text-2xl font-bold">{title}</h1>
@@ -38,16 +40,17 @@ export default function Header({ title }: HeaderProps) {
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/placeholder-avatar.jpg" alt="@usuario" />
-                <AvatarFallback>UN</AvatarFallback>
+                <AvatarFallback>
+                  {session?.user?.email?.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Usuario123</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  usuario@example.com
+                <p className="text-sm font-medium leading-none">
+                  {session?.user?.email}
                 </p>
               </div>
             </DropdownMenuLabel>
