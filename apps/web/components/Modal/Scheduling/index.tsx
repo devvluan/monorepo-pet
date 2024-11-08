@@ -1,11 +1,13 @@
+import { useState } from "react";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+
 import SuccessAlert from "@/components/SuccessAlert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
 
 const schedulingFormSchema = z.object({
   client: z.string().min(1, "Cliente é obrigatório"),
@@ -15,7 +17,7 @@ const schedulingFormSchema = z.object({
   service: z.enum(["Banho", "Tosa", "Consulta Veterinária", "Vacinação"], {
     required_error: "Serviço é obrigatório",
   }),
-  data: z.date().optional(),
+  data: z.date(),
 });
 
 type SchedulingFormData = z.infer<typeof schedulingFormSchema>;
@@ -41,6 +43,7 @@ export function Scheduling({ onClose }: SchedulingProps) {
   });
 
   const onSubmit: SubmitHandler<SchedulingFormData> = async (data) => {
+    console.log(data);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/scheduling`,
@@ -136,6 +139,11 @@ export function Scheduling({ onClose }: SchedulingProps) {
                 </option>
                 <option value="Vacinação">Vacinação</option>
               </select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="data" className="text-right">
+                Data
+              </Label>
             </div>
           </div>
           <Button type="submit" className="w-full hover:bg-green-700">
