@@ -1,7 +1,9 @@
+import SuccessAlert from "@/components/SuccessAlert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -23,6 +25,7 @@ export interface SchedulingProps {
 }
 
 export function Scheduling({ onClose }: SchedulingProps) {
+  const [showAlert, setShowAlert] = useState(false);
   const {
     register,
     handleSubmit,
@@ -38,9 +41,26 @@ export function Scheduling({ onClose }: SchedulingProps) {
   });
 
   const onSubmit: SubmitHandler<SchedulingFormData> = async (data) => {
-    console.log(data);
-
-    onClose(false);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/scheduling`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      console.log(response);
+      if (response.ok) {
+        setShowAlert(true);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      onClose(false);
+    }
   };
 
   return (
@@ -49,6 +69,10 @@ export function Scheduling({ onClose }: SchedulingProps) {
       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-4 shadow-lg">
         <h2 className="text-xl font-bold mb-4">Agendar Serviço</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <SuccessAlert
+            show={showAlert}
+            message="Agendamento registrada com sucesso"
+          />
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="client" className="text-right">
