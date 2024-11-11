@@ -9,6 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import * as React from "react";
+
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 const schedulingFormSchema = z.object({
   client: z.string().min(1, "Cliente é obrigatório"),
   pet: z.string().min(1, "Nome do Pet é obrigatório"),
@@ -17,7 +29,7 @@ const schedulingFormSchema = z.object({
   service: z.enum(["Banho", "Tosa", "Consulta Veterinária", "Vacinação"], {
     required_error: "Serviço é obrigatório",
   }),
-  data: z.date(),
+  date: z.date(),
 });
 
 type SchedulingFormData = z.infer<typeof schedulingFormSchema>;
@@ -28,9 +40,12 @@ export interface SchedulingProps {
 
 export function Scheduling({ onClose }: SchedulingProps) {
   const [showAlert, setShowAlert] = useState(false);
+  const [date, setDate] = React.useState<Date>();
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: {},
   } = useForm<SchedulingFormData>({
     resolver: zodResolver(schedulingFormSchema),
@@ -144,6 +159,36 @@ export function Scheduling({ onClose }: SchedulingProps) {
               <Label htmlFor="data" className="text-right">
                 Data
               </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[280px] justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                    {...register("date")}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? (
+                      format(date, "dd/MM/yyyy")
+                    ) : (
+                      <span>Escolha a data</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(date) => {
+                      setDate(date);
+                      setValue("date", date!);
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           <Button type="submit" className="w-full hover:bg-green-700">
