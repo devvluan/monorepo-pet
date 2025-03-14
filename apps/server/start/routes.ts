@@ -13,8 +13,8 @@ router
 
 router
   .group(() => {
-    router.post('/vendas', [SalesController, 'sales'])
-    router.get('/historico/vendas', [SalesController, 'salesHistory'])
+    router.post('/sales', [SalesController, 'sales'])
+    router.get('/history/sales', [SalesController, 'salesHistory'])
   })
   .prefix('dashboard')
 

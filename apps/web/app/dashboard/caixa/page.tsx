@@ -1,10 +1,16 @@
 // app/caixa/page.tsx
 "use client";
-import Header from "@/components/Header";
-import SuccessAlert from "@/components/SuccessAlert";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Header } from "@/components/Header";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import SuccessAlert from "@/components/SuccessAlert";
 import {
   Table,
   TableBody,
@@ -13,15 +19,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import { api } from "@/lib/axios";
+import { DateTime } from "luxon";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { CreditCard, Receipt, Wallet } from "lucide-react";
-import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
 
-const createUserFormSchema = z.object({
+const formSchema = z.object({
   client: z.string().min(1, "Cliente é obrigatório"),
   product: z.string().min(1, "Produto é obrigatório"),
   quantity: z.number().min(1, "Quantidade é obrigatório"),
@@ -29,13 +33,16 @@ const createUserFormSchema = z.object({
   form_payment: z.enum(["Cartão", "Dinheiro", "Pix"], {
     required_error: "Forma de pagamento é obrigatório",
   }),
-  data: z.date().optional(),
 });
 
-type CreateUserFormData = z.infer<typeof createUserFormSchema>;
+type CreateUserFormData = z.infer<typeof formSchema>;
+
+type Props = CreateUserFormData & {
+  created_at: string;
+};
 
 export default function Caixa() {
-  const [sales, setSales] = useState<CreateUserFormData[]>([]);
+  const [sales, setSales] = useState<Props[]>([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const {
     register,
@@ -45,7 +52,7 @@ export default function Caixa() {
     watch,
     formState: { errors },
   } = useForm<CreateUserFormData>({
-    resolver: zodResolver(createUserFormSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       client: "",
       product: "",
@@ -55,41 +62,21 @@ export default function Caixa() {
     },
   });
 
+  const fetchSalesHistory = async () => {
+    const { data } = await api.get("/dashboard/history/sales");
+    setSales(data);
+  };
+
   useEffect(() => {
-    async function fetchHistoricoVendas() {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/dashboard/historico/vendas`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const historicoVendas = await response.json();
-      setSales(historicoVendas);
-    }
-    fetchHistoricoVendas();
+    fetchSalesHistory();
   }, []);
 
-  const onSubmit: SubmitHandler<CreateUserFormData> = async (data) => {
+  const handleSalesCreate = async (body: CreateUserFormData) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/dashboard/vendas`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const { data } = await api.post("/dashboard/sales", { body });
 
-      if (response.ok) {
-        setAlertOpen(true);
-      }
-
-      setSales([...sales, { ...data, data: DateTime.now().toJSDate() }]);
+      setAlertOpen(true);
+      setSales([...sales, { ...data }]);
       reset();
     } catch (error) {
       console.error(error);
@@ -100,7 +87,10 @@ export default function Caixa() {
     <>
       <Header title="Registro de Vendas" />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 mb-6">
+      <form
+        onSubmit={handleSubmit(handleSalesCreate)}
+        className="grid gap-6 mb-6"
+      >
         <SuccessAlert
           show={alertOpen}
           message="Venda registrada com sucesso"
@@ -243,8 +233,10 @@ export default function Caixa() {
               <TableCell>R${sales.price}</TableCell>
               <TableCell>{sales.form_payment}</TableCell>
               <TableCell>
-                {sales.data
-                  ? DateTime.fromJSDate(sales.data).toFormat("dd/MM/yyyy")
+                {sales.created_at
+                  ? DateTime.fromISO(sales.created_at, {
+                      setZone: true,
+                    }).toFormat("dd/MM/yyyy HH:mm")
                   : "-"}
               </TableCell>
             </TableRow>
