@@ -74,6 +74,12 @@ export default function Caixa() {
     }
   };
 
+  const sortedSales = [...sales].sort((a, b) => {
+    const dateA = DateTime.fromISO(a.created_at);
+    const dateB = DateTime.fromISO(b.created_at);
+    return dateB.valueOf() - dateA.valueOf(); // Ordena do mais recente para o mais antigo
+  });
+
   const fetchSalesHistory = async () => {
     const { data } = await api.get("/dashboard/history/sales");
     setSales(data.sales);
@@ -225,7 +231,7 @@ export default function Caixa() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sales.map((sales, index) => (
+          {sortedSales.map((sales, index) => (
             <TableRow key={index}>
               <TableCell>{sales.client}</TableCell>
               <TableCell>{sales.product}</TableCell>
