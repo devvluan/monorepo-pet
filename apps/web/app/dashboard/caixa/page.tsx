@@ -62,15 +62,6 @@ export default function Caixa() {
     },
   });
 
-  const fetchSalesHistory = async () => {
-    const { data } = await api.get("/dashboard/history/sales");
-    setSales(data);
-  };
-
-  useEffect(() => {
-    fetchSalesHistory();
-  }, []);
-
   const handleSalesCreate = async (body: CreateUserFormData) => {
     try {
       const { data } = await api.post("/dashboard/sales", { body });
@@ -82,6 +73,15 @@ export default function Caixa() {
       console.error(error);
     }
   };
+
+  const fetchSalesHistory = async () => {
+    const { data } = await api.get("/dashboard/history/sales");
+    setSales(data.sales);
+  };
+
+  useEffect(() => {
+    fetchSalesHistory();
+  }, []);
 
   return (
     <>
