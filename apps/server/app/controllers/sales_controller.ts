@@ -6,7 +6,6 @@ export default class SalesController {
   public async sales({ request, response }: HttpContext) {
     try {
       const { body } = request.all()
-      console.log(body)
 
       if (!body.client) {
         return response.status(400).json({ error: "O campo 'client' é obrigatório." })
