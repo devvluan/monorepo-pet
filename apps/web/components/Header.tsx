@@ -17,7 +17,7 @@ interface HeaderProps {
   title: string;
 }
 
-export default function Header({ title }: HeaderProps) {
+export function Header({ title }: HeaderProps) {
   const { data: session } = useSession();
   return (
     <header className="flex justify-between items-center mb-8 px-4 py-3 bg-background border-b">

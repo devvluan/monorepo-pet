@@ -1,6 +1,6 @@
 // app/home/page.tsx
 "use client";
-import Header from "@/components/Header";
+import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Calendar, Grid, List, Plus } from "lucide-react";
 import { Scheduling } from "@/components/Modal/Scheduling";
