@@ -67,7 +67,7 @@ export default function Caixa() {
       const { data } = await api.post("/dashboard/sales", { body });
 
       setAlertOpen(true);
-      setSales([...sales, { ...data }]);
+      setSales([...sales, { ...data, created_at: DateTime.now().toString() }]);
       reset();
     } catch (error) {
       console.error(error);
