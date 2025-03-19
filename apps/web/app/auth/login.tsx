@@ -20,7 +20,7 @@ type LoginUserFormData = z.infer<typeof formSchema>;
 
 type LoginProps = Omit<LoginUserFormData, "email" | "password">;
 
-export function LoginForm({ csrfToken, ip, userAgent }: LoginProps) {
+export function Login({ csrfToken, ip, userAgent }: LoginProps) {
   const {
     register,
     handleSubmit,
@@ -35,10 +35,11 @@ export function LoginForm({ csrfToken, ip, userAgent }: LoginProps) {
   });
 
   const handleLogin = async (credentials: LoginUserFormData) => {
+    console.log(credentials);
     await signIn("credentials", {
       ...credentials,
       redirect: true,
-      callbackUrl: "/dashboard/request",
+      callbackUrl: "/dashboard",
     });
   };
 

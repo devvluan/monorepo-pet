@@ -26,11 +26,7 @@ export default class AuthController {
       const token = jwt.sign({ id: user.id, email: user.email }, 'token-jwt')
 
       return response.status(200).json({
-        jwt: token,
-        user: {
-          email: user.email,
-          fullName: user.fullName,
-        },
+        token,
       })
     } catch (error) {
       throw error
