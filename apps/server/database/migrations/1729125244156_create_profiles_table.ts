@@ -1,11 +1,14 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'schedulings'
+  protected tableName = 'profiles'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.integer('user_id').unsigned().references('id').inTable('users').notNullable()
+      table.string('time_zone', 255).notNullable().defaultTo('America/Sao_Paulo')
+      table.json('options').nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
