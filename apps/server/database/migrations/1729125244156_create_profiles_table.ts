@@ -6,8 +6,8 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('user_id').unsigned().references('id').inTable('users').notNullable()
-      table.string('time_zone', 255).notNullable().defaultTo('America/Sao_Paulo')
+      table.integer('userId').unsigned().references('id').inTable('users').notNullable()
+      table.string('timeZone', 255).notNullable().defaultTo('America/Sao_Paulo')
       table.json('options').nullable()
 
       table.timestamp('created_at')

@@ -1,16 +1,17 @@
 "use client";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { api } from "@/lib/axios";
 import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const createUserFormSchema = z.object({
+const formSchema = z.object({
   fullName: z.string().min(1, "Nome é obrigatório"),
   email: z.string().email("Email inválido"),
   password: z.string().min(6, "Senha Precisa de 6 Caracteres"),
 });
 
-type CreateUserFormData = z.infer<typeof createUserFormSchema>;
+type CreateUserFormData = z.infer<typeof formSchema>;
 
 export default function LoginUser() {
   const {
@@ -18,22 +19,14 @@ export default function LoginUser() {
     handleSubmit,
     formState: { errors },
   } = useForm<CreateUserFormData>({
-    resolver: zodResolver(createUserFormSchema),
+    resolver: zodResolver(formSchema),
   });
 
-  const onSubmit: SubmitHandler<CreateUserFormData> = async (data) => {
+  const handleRegisterSubmit = async (body: CreateUserFormData) => {
     try {
-      const response = await fetch("http://localhost:3333/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      await api.post("/auth/register", body);
 
-      if (response.ok) {
-        window.location.href = "/auth";
-      }
+      window.location.href = "/auth";
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +39,10 @@ export default function LoginUser() {
           <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             Registro de usuário
           </h1>
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="space-y-6"
+            onSubmit={handleSubmit(handleRegisterSubmit)}
+          >
             <div>
               <label
                 htmlFor="email"

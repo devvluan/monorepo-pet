@@ -35,9 +35,9 @@ const formSchema = z.object({
   }),
 });
 
-type CreateUserFormData = z.infer<typeof formSchema>;
+type CreateSalesFormData = z.infer<typeof formSchema>;
 
-type Props = CreateUserFormData & {
+type Props = CreateSalesFormData & {
   created_at: string;
 };
 
@@ -51,7 +51,7 @@ export default function Caixa() {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<CreateUserFormData>({
+  } = useForm<CreateSalesFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       client: "",
@@ -62,7 +62,7 @@ export default function Caixa() {
     },
   });
 
-  const handleSalesCreate = async (body: CreateUserFormData) => {
+  const handleSalesCreate = async (body: CreateSalesFormData) => {
     try {
       const { data } = await api.post("/dashboard/sales", { body });
 
