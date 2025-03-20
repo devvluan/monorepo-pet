@@ -20,7 +20,7 @@ export class Sales extends BaseModel {
   @column()
   declare price: number
 
-  @column()
+  @column({ columnName: 'formsPayment' })
   declare formsPayment: string
 
   @column.dateTime({ autoCreate: true, columnName: 'created_at', serializeAs: 'created_at' })

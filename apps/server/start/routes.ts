@@ -1,4 +1,5 @@
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
 
 const AuthController = () => import('#controllers/auth_controller')
 const SalesController = () => import('#controllers/sales_controller')
@@ -14,9 +15,14 @@ router
 router
   .group(() => {
     router.post('/sales', [SalesController, 'sales'])
-    router.get('/history/sales', [SalesController, 'salesHistory'])
+    router.get('/history/sales/:profileId', [SalesController, 'salesHistory'])
   })
   .prefix('dashboard')
+  .use(
+    middleware.auth({
+      guards: ['api'],
+    })
+  )
 
 router
   .group(() => {

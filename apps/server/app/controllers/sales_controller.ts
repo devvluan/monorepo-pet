@@ -1,20 +1,18 @@
+import { Sales } from '#models/sales'
 import type { HttpContext } from '@adonisjs/core/http'
-import db from '@adonisjs/lucid/services/db'
-import { DateTime } from 'luxon'
 
 export default class SalesController {
-  public async sales({ request, response }: HttpContext) {
+  public async sales({ auth, request, response }: HttpContext) {
     try {
+      const user = auth.user
+      console.log(user)
       const { body } = request.all()
 
       if (!body.client) {
         return response.status(400).json({ error: "O campo 'client' é obrigatório." })
       }
 
-      await db.table('sales').insert({
-        ...body,
-        created_at: DateTime.local().setZone('America/Sao_Paulo').toFormat('yyyy-MM-dd HH:mm:ss'),
-      })
+      await Sales.create({ ...body, profileId: 1 })
 
       return response.status(200).json(body)
     } catch (error) {
@@ -23,11 +21,10 @@ export default class SalesController {
     }
   }
 
-  public async salesHistory({ response }: HttpContext) {
+  public async salesHistory({ params, response }: HttpContext) {
     try {
-      const sales = await db
-        .from('sales')
-        .select('client', 'product', 'quantity', 'price', 'form_payment', 'created_at')
+      const { profileId } = params
+      const sales = await Sales.findBy('profileId', profileId)
 
       return response.status(200).json({ sales })
     } catch (error) {

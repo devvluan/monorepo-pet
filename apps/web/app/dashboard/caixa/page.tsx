@@ -30,7 +30,7 @@ const formSchema = z.object({
   product: z.string().min(1, "Produto é obrigatório"),
   quantity: z.number().min(1, "Quantidade é obrigatório"),
   price: z.number().min(0.01, "Valor deve ser maior que zero"),
-  form_payment: z.enum(["Cartão", "Dinheiro", "Pix"], {
+  formsPayment: z.enum(["card", "money", "pix"], {
     required_error: "Forma de pagamento é obrigatório",
   }),
 });
@@ -58,7 +58,7 @@ export default function Caixa() {
       product: "",
       quantity: 0,
       price: 0,
-      form_payment: "Cartão",
+      formsPayment: "card",
     },
   });
 
@@ -81,8 +81,10 @@ export default function Caixa() {
   });
 
   const fetchSalesHistory = async () => {
-    const { data } = await api.get("/dashboard/history/sales");
-    setSales(data.sales);
+    const { data } = await api.get(`/dashboard/history/sales/${1}`);
+    // if (data.sales) {
+    //   setSales(data.sales);
+    // }
   };
 
   useEffect(() => {
@@ -162,17 +164,13 @@ export default function Caixa() {
           <RadioGroup
             defaultValue="card"
             className="grid grid-cols-3 gap-4 mt-2"
-            value={watch("form_payment")}
+            value={watch("formsPayment")}
             onValueChange={(value) =>
-              setValue("form_payment", value as "Cartão" | "Dinheiro" | "Pix")
+              setValue("formsPayment", value as "card" | "money" | "pix")
             }
           >
             <div>
-              <RadioGroupItem
-                value="Cartão"
-                id="card"
-                className="peer sr-only"
-              />
+              <RadioGroupItem value="card" id="card" className="peer sr-only" />
               <Label
                 htmlFor="card"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -183,7 +181,7 @@ export default function Caixa() {
             </div>
             <div>
               <RadioGroupItem
-                value="Dinheiro"
+                value="money"
                 id="money"
                 className="peer sr-only"
               />
@@ -196,7 +194,7 @@ export default function Caixa() {
               </Label>
             </div>
             <div>
-              <RadioGroupItem value="Pix" id="pix" className="peer sr-only" />
+              <RadioGroupItem value="pix" id="pix" className="peer sr-only" />
               <Label
                 htmlFor="pix"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
@@ -206,10 +204,10 @@ export default function Caixa() {
               </Label>
             </div>
           </RadioGroup>
-          <input type="hidden" {...register("form_payment")} />
-          {errors.form_payment && (
+          <input type="hidden" {...register("formsPayment")} />
+          {errors.formsPayment && (
             <p className="text-red-500 text-sm mt-1">
-              {errors.form_payment.message}
+              {errors.formsPayment.message}
             </p>
           )}
         </div>
@@ -237,7 +235,7 @@ export default function Caixa() {
               <TableCell>{sales.product}</TableCell>
               <TableCell>{sales.quantity}</TableCell>
               <TableCell>R${sales.price}</TableCell>
-              <TableCell>{sales.form_payment}</TableCell>
+              <TableCell>{sales.formsPayment}</TableCell>
               <TableCell>
                 {sales.created_at
                   ? DateTime.fromISO(sales.created_at, {

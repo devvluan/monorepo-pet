@@ -1,37 +1,54 @@
-import { Session } from "next-auth";
-
 import "../styles/globals.css";
-import { Sidebar } from "@/components/Sidebar";
-import RootLayout from "@/components/RootLayout";
 
-export const metadata = {
+import { Sidebar } from "@/components/Sidebar";
+import { Metadata } from "next";
+import NextAuthSessionProvider from "@/providers/SessionProvider";
+import { Poppins, Open_Sans, Nunito } from "next/font/google";
+
+const openSans = Open_Sans({
+  weight: ["300", "400", "600", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+});
+
+const nuninto = Nunito({
+  weight: ["300", "400", "600", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
   title: "Ludis PET",
   description: "Dashboard de gestão de pets",
 };
 
-interface Props {
-  session: Session | null;
+export default function RootLayout({
+  children,
+}: {
   children: React.ReactNode;
-}
-
-const Layout: React.FC<Props> = ({ children, session }) => {
+}) {
   return (
-    <html lang="pt-BR">
+    <html
+      lang="pt-BR"
+      className={`${openSans.className} ${nuninto.className} ${poppins.className}`}
+    >
       <head title="Gestão de Pet - Dashboard" />
       <body>
+        <div className="flex-grow overflow-auto">
+          <main className="p-6">
+            <NextAuthSessionProvider>{children}</NextAuthSessionProvider>
+          </main>
+        </div>
         <div className="flex h-screen">
-          {/* Sidebar */}
           <Sidebar />
-          {/* Main content area */}
-          <div className="flex-grow overflow-auto">
-            <main className="p-6">
-              <RootLayout session={session}>{children}</RootLayout>
-            </main>
-          </div>
         </div>
       </body>
     </html>
   );
-};
-
-export default Layout;
+}
