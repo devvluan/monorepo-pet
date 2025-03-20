@@ -1,7 +1,6 @@
-import "@/app/styles/globals.css";
-
 export const metadata = {
-  title: "Gestão de Pet - Login",
+  title: "Ludis Pet",
+  description: "Gestão de PetShop",
 };
 
 export default function RootLayout({

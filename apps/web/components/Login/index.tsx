@@ -1,57 +1,45 @@
 "use client";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
 import "@/app/styles/globals.css";
 
-const createUserFormSchema = z.object({
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+
+const formSchema = z.object({
   email: z.string().email("Email inválido"),
   password: z.string().min(6, "Senha inválida"),
+  ip: z.string(),
+  userAgent: z.string(),
+  csrfToken: z.string(),
 });
 
-type CreateUserFormData = z.infer<typeof createUserFormSchema>;
+type LoginUserFormData = z.infer<typeof formSchema>;
 
-export function LoginForm() {
+type LoginProps = Omit<LoginUserFormData, "email" | "password">;
+
+export function Login({ csrfToken, ip, userAgent }: LoginProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateUserFormData>({
-    resolver: zodResolver(createUserFormSchema),
+  } = useForm<LoginUserFormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      csrfToken,
+      userAgent,
+      ip,
+    },
   });
 
-  const onSubmit: SubmitHandler<CreateUserFormData> = async (data) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Erro desconhecido");
-      }
-
-      const result = await response.json();
-
-      if (result.jwt) {
-        await signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          callbackUrl: "/dashboard",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const handleLogin = async (credentials: LoginUserFormData) => {
+    await signIn("credentials", {
+      ...credentials,
+      redirect: true,
+      callbackUrl: "/dashboard",
+    });
   };
 
   return (
@@ -61,7 +49,10 @@ export function LoginForm() {
           <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             Login
           </h1>
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
+            <input type="hidden" {...register("csrfToken")} />
+            <input type="hidden" {...register("ip")} />
+            <input type="hidden" {...register("userAgent")} />
             <div>
               <label
                 htmlFor="email"

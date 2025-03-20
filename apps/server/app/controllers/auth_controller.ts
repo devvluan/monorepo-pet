@@ -1,6 +1,6 @@
 import { HttpContext } from '@adonisjs/core/http'
 import hash from '@adonisjs/core/services/hash'
-import jwt from 'jsonwebtoken'
+// import jwt from 'jsonwebtoken'
 import User from '#models/user'
 
 export default class AuthController {
@@ -11,26 +11,27 @@ export default class AuthController {
       const user = await User.findBy('email', email)
       if (!user) {
         return response.status(401).json({
-          message: 'Email ou senha inválidos',
+          message: 'Invalid user credentials',
         })
       }
-
       const isPasswordValid = await hash.verify(user.password, password)
 
       if (!isPasswordValid) {
         return response.status(401).json({
-          message: 'Senha inválida',
+          message: 'Invalid user credentials',
+          field: 'password',
         })
       }
 
-      const token = jwt.sign({ id: user.id, email: user.email }, 'token-jwt')
+      const token = await User.accessTokens.create(user, ['*'], {
+        name: 'dashboard_login',
+      })
 
       return response.status(200).json({
-        jwt: token,
-        user: {
-          email: user.email,
-          fullName: user.fullName,
-        },
+        type: 'bearer',
+        token: token.value!.release(),
+        refreshToken: null,
+        user: user.toJSON(),
       })
     } catch (error) {
       throw error
