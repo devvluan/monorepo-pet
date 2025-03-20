@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProfileType } from '@ludispet/entities/dist/profile'
 import 'next-auth'
 
@@ -9,13 +10,12 @@ declare module 'next-auth' {
   }
 
   interface UserType {
-    [key: string]: unknown
     id: number
-    secretNumber: null | string
     fullName: string
     email: string
     password: string
-    security_key?: string
+    [key: string]: any
+    v1Token?: any
     profile?: ProfileType
     created_at: string
     updated_at: string

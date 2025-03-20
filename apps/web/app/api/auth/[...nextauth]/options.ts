@@ -73,9 +73,7 @@ export const options: AuthOptions = {
       return session
     },
     async jwt({ token, user: data }) {
-      console.log( 'token => ', token)
-      if ((token.user as UserType) && !(token.user as UserType).v3Token && !(token.user as UserType).admMode) {
-        console.warn('bateu aqui')
+      if ((token.user as UserType) && !(token.user as UserType).v1Token && !(token.user as UserType).admMode) {
         token.user = null
         return token
       }
@@ -83,7 +81,7 @@ export const options: AuthOptions = {
       if (data) {
         token.accessToken = (data as unknown as UserType).token
         token.user = (data as unknown as UserType)?.user as UserType
-        api.defaults.headers.common.Authorization = `Bearer ${(token.user as UserType).v3Token}`
+        api.defaults.headers.common.Authorization = `Bearer ${(token.user as UserType).v1Token}`
       }
 
       return token
@@ -117,7 +115,7 @@ export const options: AuthOptions = {
           if (data.token) {
             return {
               login: true,
-              user: { ...data.user, loginDate: new Date().getTime(), v3Token: data.token },
+              user: { ...data.user, loginDate: new Date().getTime(), v1Token: data.token },
             }
           }
         } catch (error) {
@@ -126,7 +124,6 @@ export const options: AuthOptions = {
             const errorData = error.response?.data
 
             if ((errorData.field && errorData.field === 'password') || errorData?.message === 'Invalid user credentials') {
-              console.warn('bateu aqui no erro')
               throw new Error(encodeURIComponent('Senha ou email inválido(s)!'))
             }
           }
