@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import { getCsrfToken } from "next-auth/react";
 import { headers } from "next/headers";
-import { Login } from "./login";
+import { Login } from "@/components/Login";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import { options } from "../api/auth/[...nextauth]/options";
+import { options } from "../../api/auth/[...nextauth]/options";
 
 export const metadata: Metadata = {
   title: "LudisPet - Login",

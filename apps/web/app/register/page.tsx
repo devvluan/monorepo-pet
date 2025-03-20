@@ -26,7 +26,7 @@ export default function LoginUser() {
     try {
       await api.post("/auth/register", body);
 
-      window.location.href = "/auth";
+      window.location.href = "/auth/login";
     } catch (error) {
       console.error(error);
     }

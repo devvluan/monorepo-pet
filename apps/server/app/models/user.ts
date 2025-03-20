@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { BaseModel, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -39,4 +40,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
     foreignKey: 'userId',
   })
   declare profiles: HasMany<typeof Profile>
+
+  static accessTokens = DbAccessTokensProvider.forModel(User, {
+    prefix: 'oat_',
+    table: 'auth_access_tokens',
+    type: 'auth_token',
+    tokenSecretLength: 40,
+  })
 }

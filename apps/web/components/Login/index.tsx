@@ -35,7 +35,6 @@ export function Login({ csrfToken, ip, userAgent }: LoginProps) {
   });
 
   const handleLogin = async (credentials: LoginUserFormData) => {
-    console.log(credentials);
     await signIn("credentials", {
       ...credentials,
       redirect: true,

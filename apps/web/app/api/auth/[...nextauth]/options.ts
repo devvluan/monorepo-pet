@@ -73,7 +73,9 @@ export const options: AuthOptions = {
       return session
     },
     async jwt({ token, user: data }) {
+      console.log( 'token => ', token)
       if ((token.user as UserType) && !(token.user as UserType).v3Token && !(token.user as UserType).admMode) {
+        console.warn('bateu aqui')
         token.user = null
         return token
       }
@@ -120,16 +122,12 @@ export const options: AuthOptions = {
           }
         } catch (error) {
           console.error(error)
-          // generate a switch for error instance
           if (error instanceof AxiosError) {
             const errorData = error.response?.data
 
-            // errorData = Array.isArray(errorData) ? errorData[0] : errorData
-            if ((errorData.field && errorData.field === 'password') || errorData?.errors?.at(0)?.message === 'Invalid user credentials') {
+            if ((errorData.field && errorData.field === 'password') || errorData?.message === 'Invalid user credentials') {
+              console.warn('bateu aqui no erro')
               throw new Error(encodeURIComponent('Senha ou email inválido(s)!'))
-            }
-            if (errorData.message) {
-              throw new Error(encodeURIComponent(errorData.message))
             }
           }
         }
