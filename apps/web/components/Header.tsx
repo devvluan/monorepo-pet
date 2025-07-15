@@ -1,5 +1,4 @@
-import { Bell, LogOut, Search, Settings, User } from "lucide-react";
-import { Button } from "./ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,10 +7,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "./ui/input";
-import { signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
+import { Bell, LogOut, Settings, User } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { Button } from "./ui/button";
+import { SidebarTrigger } from "./ui/sidebar";
 
 interface HeaderProps {
   title: string;
@@ -20,17 +19,10 @@ interface HeaderProps {
 export function Header({ title }: HeaderProps) {
   const { data: session } = useSession();
   return (
-    <header className="flex justify-between items-center mb-8 px-4 py-3 bg-background border-b">
+    <header className="flex items-center mb-8 px-4 py-3 bg-background border-b">
+      <SidebarTrigger className="" />
       <h1 className="text-2xl font-bold">{title}</h1>
       <div className="flex items-center space-x-4">
-        <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            type="search"
-            placeholder="Pesquisar..."
-            className="pl-10 pr-4 w-[200px] lg:w-[300px]"
-          />
-        </div>
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="w-5 h-5" />
           <span className="sr-only">Notificações</span>

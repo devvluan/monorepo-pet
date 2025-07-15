@@ -2,15 +2,15 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { Header } from "@/components/Header";
+import SuccessAlert from "@/components/SuccessAlert";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import SuccessAlert from "@/components/SuccessAlert";
 import {
   Table,
   TableBody,
@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/table";
 
 import { api } from "@/lib/axios";
-import { DateTime } from "luxon";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { CreditCard, Receipt, Wallet } from "lucide-react";
+import { DateTime } from "luxon";
 
 const formSchema = z.object({
   client: z.string().min(1, "Cliente é obrigatório"),
@@ -94,7 +94,6 @@ export default function Caixa() {
   return (
     <>
       <Header title="Registro de Vendas" />
-
       <form
         onSubmit={handleSubmit(handleSalesCreate)}
         className="grid gap-6 mb-6"

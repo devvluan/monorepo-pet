@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   Calendar,
   Dog,
@@ -10,8 +10,8 @@ import {
   ShoppingCart,
   Users,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 export function Sidebar() {
   return (
